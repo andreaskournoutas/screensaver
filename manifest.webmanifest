@@ -3,7 +3,7 @@
 	"lang" : "Greek, Modern",
 	"name" : "HTML Screensaver",
 	"scope" : "/screensaver/",
-	"display" : "standalone",
+	"display" : "fullscreen",
 	"start_url" : "https://andreaskournoutas.github.io/screensaver/",
 	"short_name" : "Screensaver",
 	"theme_color" : "#000000",
