@@ -6,7 +6,7 @@
         <meta name="author" content="Andreas Kournoutas">
         <meta http-equiv="refresh" content="3600">
         <title>HTML Screensaver</title>
-        <link rel='manifest' href='manifest.webmanifest'>
+        <link rel="manifest" href='manifest.webmanifest'>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto&display=swap&subset=greek">
         <style>
@@ -261,7 +261,7 @@
                 try {
                     let response = await fetch("https://api.openweathermap.org/data/2.5/weather?id=264371&units=metric&lang=el&APPID=10935e3b27c5f4243595d8a541ec1277");
                     let json = await response.json();
-                    console.log(JSON.stringify(json)); // to be removed
+                    //console.log(JSON.stringify(json)); // to be removed
                     let now = new Date();
                     let time = Math.floor(now.getTime() / 1000);
                     if ((time >= json.sys.sunrise) && (time <  json.sys.sunset)) {
@@ -282,7 +282,7 @@
                 try {
                     let response = await fetch("https://newsapi.org/v2/top-headlines?country=gr&apiKey=b5ace716ff454673ba8d7b08dccdf23d");
                     let json = await response.json();
-                    console.log(JSON.stringify(json)); // to be removed
+                    //console.log(JSON.stringify(json)); // to be removed
                     for (let i = 0; i <= 4; i++) {
                         if (json.articles[i].urlToImage == null) {
                             document.getElementById("media-item-" + i + "-image").setAttribute("src", "newspaper.svg");
