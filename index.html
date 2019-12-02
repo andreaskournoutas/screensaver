@@ -33,7 +33,7 @@
                 object-fit: cover;
             }
             .media-item-title {
-                font-size: 1.2rem;
+                font-size: 1.15rem;
             }
         </style>
     </head>
@@ -239,10 +239,15 @@
             const degrees = document.getElementById("degrees");
             const weatherDescription = document.getElementById("weather-description");
 
+            let now, time, responseWeather, jsonWeather, responseNews, jsonNews;
+
             (function clock() {
-                let now = new Date();
+                now = new Date();
                 hours.textContent = twoDigitNumber(now.getHours());
                 minutes.textContent = twoDigitNumber(now.getMinutes());
+                day.textContent = days[now.getDay()];
+                dayOfMonth.textContent = now.getDate();
+                month.textContent = months[now.getMonth()];
                 setInterval(clock, 60000);
             }())
 
@@ -253,29 +258,21 @@
                 return i;
             }
 
-            (function calendar() {
-                let now = new Date();
-                day.textContent = days[now.getDay()];
-                dayOfMonth.textContent = now.getDate();
-                month.textContent = months[now.getMonth()];
-                setInterval(calendar, 60000);
-            }())
-
             ;(async function weather() {
                 try {
-                    let response = await fetch("https://api.openweathermap.org/data/2.5/weather?id=264371&units=metric&lang=el&APPID=10935e3b27c5f4243595d8a541ec1277");
-                    let json = await response.json();
-                    //console.log(JSON.stringify(json)); // to be removed
-                    let now = new Date();
-                    let time = Math.floor(now.getTime() / 1000);
-                    if ((time >= json.sys.sunrise) && (time <  json.sys.sunset)) {
-                        weatherIcon.innerHTML = weatherConditions.day[json.weather[0].id];
+                    responseWeather = await fetch("https://api.openweathermap.org/data/2.5/weather?id=264371&units=metric&lang=el&APPID=10935e3b27c5f4243595d8a541ec1277");
+                    jsonWeather = await responseWeather.json();
+                    //console.log(JSON.stringify(jsonWeather)); // to be removed
+                    now = new Date();
+                    time = Math.floor(now.getTime() / 1000);
+                    if ((time >= jsonWeather.sys.sunrise) && (time <  jsonWeather.sys.sunset)) {
+                        weatherIcon.innerHTML = weatherConditions.day[jsonWeather.weather[0].id];
                     }
                     else {
-                        weatherIcon.innerHTML = weatherConditions.night[json.weather[0].id];
+                        weatherIcon.innerHTML = weatherConditions.night[jsonWeather.weather[0].id];
                     }
-                    degrees.textContent = Math.round(Number(json.main.temp));
-                    weatherDescription.textContent = json.weather[0].description;
+                    degrees.textContent = Math.round(Number(jsonWeather.main.temp));
+                    weatherDescription.textContent = jsonWeather.weather[0].description;
                 }
                 catch (error) {
                     console.error(error);
@@ -285,23 +282,23 @@
 
             ;(async function news() {
                 try {
-                    let response = await fetch("https://newsapi.org/v2/top-headlines?country=gr&pageSize=5&apiKey=b5ace716ff454673ba8d7b08dccdf23d");
-                    let json = await response.json();
-                    //console.log(JSON.stringify(json)); // to be removed
+                    responseNews = await fetch("https://newsapi.org/v2/top-headlines?country=gr&pageSize=5&apiKey=b5ace716ff454673ba8d7b08dccdf23d");
+                    jsonNews = await responseNews.json();
+                    //console.log(JSON.stringify(jsonNews)); // to be removed
                     for (let i = 0; i <= 4; i++) {
-                        if (json.articles[i].urlToImage == null) {
+                        if (jsonNews.articles[i].urlToImage == null) {
                             document.getElementById("media-item-" + i + "-image").setAttribute("src", "newspaper.svg");
                         }
                         else {
-                            document.getElementById("media-item-" + i + "-image").setAttribute("src", json.articles[i].urlToImage);
+                            document.getElementById("media-item-" + i + "-image").setAttribute("src", jsonNews.articles[i].urlToImage);
                         }
-                        document.getElementById("media-item-" + i + "-title").innerHTML = json.articles[i].title;
+                        document.getElementById("media-item-" + i + "-title").innerHTML = jsonNews.articles[i].title;
                     }
                 }
                 catch (error) {
                     console.error(error);
                 }
-                //setInterval(news, 3600000);
+                setInterval(news, 3600000);
             }())
         </script>
     </body>
