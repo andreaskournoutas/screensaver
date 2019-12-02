@@ -258,6 +258,7 @@
                 day.textContent = days[now.getDay()];
                 dayOfMonth.textContent = now.getDate();
                 month.textContent = months[now.getMonth()];
+                setInterval(calendar, 60000);
             }())
 
             ;(async function weather() {
@@ -279,11 +280,12 @@
                 catch (error) {
                     console.error(error);
                 }
+                setInterval(weather, 3600000);
             }())
 
             ;(async function news() {
                 try {
-                    let response = await fetch("https://newsapi.org/v2/top-headlines?country=gr&apiKey=b5ace716ff454673ba8d7b08dccdf23d");
+                    let response = await fetch("https://newsapi.org/v2/top-headlines?country=gr&pageSize=5&apiKey=b5ace716ff454673ba8d7b08dccdf23d");
                     let json = await response.json();
                     //console.log(JSON.stringify(json)); // to be removed
                     for (let i = 0; i <= 4; i++) {
@@ -299,6 +301,7 @@
                 catch (error) {
                     console.error(error);
                 }
+                setInterval(news, 3600000);
             }())
         </script>
     </body>
