@@ -248,7 +248,7 @@
                 day.textContent = days[now.getDay()];
                 dayOfMonth.textContent = now.getDate();
                 month.textContent = months[now.getMonth()];
-                setInterval(clock, 60000);
+                setTimeout(clock, 60000);
             }())
 
             function twoDigitNumber(i) {
@@ -277,7 +277,7 @@
                 catch (error) {
                     console.error(error);
                 }
-                //setInterval(weather, 3600000);
+                setTimeout(weather, 3600000);
             }())
 
             ;(async function news() {
@@ -298,7 +298,7 @@
                 catch (error) {
                     console.error(error);
                 }
-                //setInterval(news, 3600000);
+                setTimeout(news, 3600000);
             }())
         </script>
     </body>
