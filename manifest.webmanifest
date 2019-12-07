@@ -1,13 +1,13 @@
 {
 	"dir" : "ltr",
 	"lang" : "Greek, Modern",
-	"name" : "HTML Screensaver",
+	"name" : "Screensaver PWA",
 	"scope" : "/screensaver/",
 	"display" : "fullscreen",
 	"start_url" : "https://andreaskournoutas.github.io/screensaver/",
 	"short_name" : "Screensaver",
 	"theme_color" : "#000000",
-	"description" : "HTML Screensaver",
+	"description" : "A screensaver PWA with info for the city of Athens.",
 	"orientation" : "landscape",
 	"background_color" : "#000000",
 	"icons" : [
