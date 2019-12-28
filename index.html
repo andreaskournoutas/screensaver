@@ -36,6 +36,10 @@
             .media-item-title {
                 font-size: 1.15rem;
             }
+            .spinner-border {
+                width: 80px;
+                height: 80px;
+            }
         </style>
     </head>
     <body>
@@ -51,7 +55,11 @@
                             <span id="day-of-month"></span>
                             <span id="month"></span>
                         </div>
-                        <div id="weather-icon" class="col-12"></div>
+                        <div id="weather-icon" class="col-12">
+                            <div class="spinner-border mb-3" role="status">
+                                <span class="sr-only">Φορτώνει...</span>
+                            </div>
+                        </div>
                         <div class="col-12 display-3">
                             <span id="degrees">-</span><sup>o</sup>
                             <span>C</span>
@@ -266,7 +274,7 @@
                     })
                 }
                 else {
-                    console.info("geolocation is not supported in this environment");
+                    console.info("Geolocation is not supported in this environment");
                 }
             }())
 
