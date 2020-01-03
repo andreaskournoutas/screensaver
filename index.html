@@ -248,7 +248,7 @@
             const degrees = document.getElementById("degrees");
             const weatherDescription = document.getElementById("weather-description");
 
-            let now, time, responseWeather, jsonWeather, responseNews, jsonNews;
+            let now, latitude, longitude, time, responseWeather, jsonWeather, responseNews, jsonNews;
 
             (function clock() {
                 now = new Date();
@@ -270,7 +270,9 @@
             (function getLocation() {
                 if ("geolocation" in navigator) {
                     navigator.geolocation.getCurrentPosition((position) => {
-                        weather(Math.round(position.coords.latitude), Math.round(position.coords.longitude));
+                        latitude = Math.round(position.coords.latitude);
+                        longitude = Math.round(position.coords.longitude);
+                        weather();
                     })
                 }
                 else {
@@ -278,7 +280,7 @@
                 }
             }())
 
-            ;async function weather(latitude, longitude) {
+            ;async function weather() {
                 try {
                     responseWeather = await fetch("https://api.openweathermap.org/data/2.5/weather?lat=" + latitude + "&lon=" + longitude + "&units=metric&lang=el&APPID=10935e3b27c5f4243595d8a541ec1277");
                     jsonWeather = await responseWeather.json();
@@ -293,6 +295,7 @@
                     }
                     degrees.textContent = Math.round(Number(jsonWeather.main.temp));
                     weatherDescription.textContent = jsonWeather.weather[0].description;
+                    console.log("Weather updated");
                 }
                 catch (error) {
                     console.error(error);
@@ -314,6 +317,7 @@
                         }
                         document.getElementById("media-item-" + i + "-title").innerHTML = jsonNews.articles[i].title;
                     }
+                    console.log("News updated");
                 }
                 catch (error) {
                     console.error(error);
