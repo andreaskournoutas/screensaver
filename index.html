@@ -5,12 +5,14 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="author" content="Andreas Kournoutas">
         <meta name="theme-color" content="#000000">
+        <meta name="description" content="A screensaver PWA with weather info and news headlines">
+        <meta name="keywords" content="screensaver, PWA, clock, weather, news">
         <title>Screensaver PWA</title>
         <link rel="icon" type="image/png" sizes="32x32" href="icon-32x32.png">
         <link rel="icon" type="image/png" sizes="16x16" href="icon-16x16.png">
         <link rel="apple-touch-icon" sizes="180x180" href="icon-180x180.png">
         <link rel="apple-touch-icon" sizes="120x120" href="icon-120x120.png">
-        <link rel="manifest" href="manifest.webmanifest?v=3">
+        <link rel="manifest" href="manifest.webmanifest?v=4">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto&display=swap&subset=greek">
         <style>
@@ -108,7 +110,9 @@
                         </div>
                         <div class="col-4 col-sm-12">
                             <div id="weather-icon" class="weather-icon">
-                                <div class="spinner-border" role="status"></div>
+                                <div class="spinner-border" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
                             </div>
                         </div>
                         <div class="col-4 col-sm-12">
@@ -125,33 +129,33 @@
                 <div class="col-12 col-sm-8 col-md-7">
                     <ul class="list-unstyled mb-0">
                         <li class="media mb-3">
-                            <img id="media-item-0-image" class="mr-3 media-item-image" src="newspaper.svg" onError="this.onerror=null;this.src='newspaper.svg';" />
+                            <img id="media-item-0-image" class="mr-3 media-item-image" src="newspaper.svg" onError="this.onerror=null;this.src='newspaper.svg';" alt="Article image" />
                             <div class="media-body">
-                                <span id="media-item-0-title" class="media-item-title"></span>
+                                <span id="media-item-0-title" class="media-item-title">Loading...</span>
                             </div>
                         </li>
                         <li class="media mb-3">
-                            <img id="media-item-1-image" class="mr-3 media-item-image" src="newspaper.svg" onError="this.onerror=null;this.src='newspaper.svg';" />
+                            <img id="media-item-1-image" class="mr-3 media-item-image" src="newspaper.svg" onError="this.onerror=null;this.src='newspaper.svg';" alt="Article image" />
                             <div class="media-body">
-                                <span id="media-item-1-title" class="media-item-title"></span>
+                                <span id="media-item-1-title" class="media-item-title">Loading...</span>
                             </div>
                         </li>
                         <li class="media mb-3">
-                            <img id="media-item-2-image" class="mr-3 media-item-image" src="newspaper.svg" onError="this.onerror=null;this.src='newspaper.svg';" />
+                            <img id="media-item-2-image" class="mr-3 media-item-image" src="newspaper.svg" onError="this.onerror=null;this.src='newspaper.svg';" alt="Article image" />
                             <div class="media-body">
-                                <span id="media-item-2-title" class="media-item-title"></span>
+                                <span id="media-item-2-title" class="media-item-title">Loading...</span>
                             </div>
                         </li>
                         <li class="media mb-3">
-                            <img id="media-item-3-image" class="mr-3 media-item-image" src="newspaper.svg" onError="this.onerror=null;this.src='newspaper.svg';" />
+                            <img id="media-item-3-image" class="mr-3 media-item-image" src="newspaper.svg" onError="this.onerror=null;this.src='newspaper.svg';" alt="Article image" />
                             <div class="media-body">
-                                <span id="media-item-3-title" class="media-item-title"></span>
+                                <span id="media-item-3-title" class="media-item-title">Loading...</span>
                             </div>
                         </li>
                         <li class="media d-flex d-sm-none d-md-flex">
-                            <img id="media-item-4-image" class="mr-3 media-item-image" src="newspaper.svg" onError="this.onerror=null;this.src='newspaper.svg';" />
+                            <img id="media-item-4-image" class="mr-3 media-item-image" src="newspaper.svg" onError="this.onerror=null;this.src='newspaper.svg';" alt="Article image" />
                             <div class="media-body">
-                                <span id="media-item-4-title" class="media-item-title"></span>
+                                <span id="media-item-4-title" class="media-item-title">Loading...</span>
                             </div>
                         </li>
                     </ul>
@@ -338,7 +342,6 @@
                 try {
                     responseGeocodingData = await fetch("https://eu1.locationiq.com/v1/reverse.php?key=cc9299850c1617&lat=" + latitude + "&lon=" + longitude + "&format=json");
                     jsonGeocodingData = await responseGeocodingData.json();
-                    console.log(jsonGeocodingData);
                     countryCode = jsonGeocodingData.address.country_code;
                     console.log("Country code retrieved successfully")
                     getLanguage();
@@ -353,8 +356,8 @@
                 try {
                     responseLanguageData = await fetch("https://restcountries.eu/rest/v2/alpha/" + countryCode);
                     jsonLanguageData = await responseLanguageData.json();
-                    console.log(jsonLanguageData);
-                    languageCode = jsonLanguageData.languages[0].iso639_1
+                    languageCode = jsonLanguageData.languages[0].iso639_1;
+                    document.documentElement.setAttribute("lang", languageCode);
                     console.log("Language code retrieved successfully");
                     weather();
                 }
@@ -368,7 +371,6 @@
                     try {
                         responseWeather = await fetch("https://api.openweathermap.org/data/2.5/weather?lat=" + latitude + "&lon=" + longitude + "&units=metric&lang=" + languageCode + "&APPID=10935e3b27c5f4243595d8a541ec1277");
                         jsonWeather = await responseWeather.json();
-                        console.log(jsonWeather);
                         time = Math.floor(now.getTime() / 1000);
                         if ((time >= jsonWeather.sys.sunrise) && (time <  jsonWeather.sys.sunset)) {
                             weatherIcon.innerHTML = weatherConditions.day[jsonWeather.weather[0].id];
@@ -395,7 +397,6 @@
                 try {
                     responseNews = await fetch("https://newsapi.org/v2/top-headlines?country=" + countryCode + "&pageSize=5&apiKey=b5ace716ff454673ba8d7b08dccdf23d");
                     jsonNews = await responseNews.json();
-                    console.log(jsonNews);
                     for (let i = 0; i <= 4; i++) {
                         urlToImage = jsonNews.articles[i].urlToImage;
                         if ((urlToImage != null) && (urlToImage != "") && (urlToImage.startsWith("https"))) {
