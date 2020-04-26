@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="el">
+<html>
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -18,56 +18,111 @@
                 font-family: 'Roboto', sans-serif;
                 background-color: black;
                 color: white;
-                width: 100vw;
                 height: 100vh;
             }
-            .display-1 {
+            .hour {
+                font-size: 2rem;
+                font-weight: 300;
+                margin-bottom: .25rem;
                 line-height: 1;
             }
             #weather-icon svg {
                 fill: white;
-                height: 140px;
+                height: 72px;
+            }
+            .degrees {
+                font-size: 2rem;
+                font-weight: 300;
+                margin-bottom:.25rem;
+                line-height: 1;
             }
             .media-item-image {
-                width: 80px;
-                height: 80px;
+                width: 50px;
+                height: 50px;
                 object-fit: cover;
             }
             .media-item-title {
-                font-size: 1.15rem;
+                font-size: .8rem;
             }
             .spinner-border {
-                width: 80px;
-                height: 80px;
+                width: 46px;
+                height: 46px;
+            }
+            @media (min-width: 576px) {
+                .hour {
+                    font-size: 4rem;
+                }
+                .date {
+                    margin-bottom: 2rem;
+                }
+                .weather-icon {
+                    margin-bottom: .5rem;
+                }
+                .degrees {
+                    font-size: 3rem;
+                    line-height: 1.2;
+                    margin-bottom: 0;
+                }
+            }
+            @media (min-width: 768px) {
+                .hour {
+                    font-size: 6rem;
+                }
+                .date {
+                    margin-bottom: 3rem;
+                }
+                #weather-icon svg {
+                    height: 140px;
+                }
+                .degrees {
+                    font-size: 4.5rem;
+                }
+                .media-item-image {
+                    width: 80px;
+                    height: 80px;
+                }
+                .media-item-title {
+                    font-size: 1.15rem;
+                }
+                .spinner-border {
+                    width: 80px;
+                    height: 80px;
+                }
             }
         </style>
     </head>
     <body>
         <div class="container-fluid h-100">
-            <div id="app" class="row h-100 align-items-center">
-                <div class="col-5">
-                    <div class="row text-center">
-                        <div class="col-12 display-1 mb-1">
-                            <span id="hours"></span>:<span id="minutes"></span>
+            <div class="row h-100 align-items-center">
+                <div class="col-12 col-sm-4 col-md-5">
+                    <div class="row text-center align-items-center">
+                        <div class="col-4 col-sm-12">
+                            <div class="hour">
+                                <span id="hours"></span>:<span id="minutes"></span>
+                            </div>
+                            <div class="date">
+                                <span id="day"></span>
+                                <span id="day-of-month"></span>
+                                <span id="month"></span>
+                            </div>
                         </div>
-                        <div class="col-12 mb-5">
-                            <span id="day"></span>
-                            <span id="day-of-month"></span>
-                            <span id="month"></span>
+                        <div class="col-4 col-sm-12">
+                            <div id="weather-icon" class="weather-icon">
+                                <div class="spinner-border" role="status"></div>
+                            </div>
                         </div>
-                        <div id="weather-icon" class="col-12 mb-2">
-                            <div class="spinner-border mb-3" role="status"></div>
-                        </div>
-                        <div class="col-12 display-3">
-                            <span id="degrees">-</span><sup>o</sup>
-                            <span>C</span>
-                        </div>
-                        <div class="col-12">
-                            <span id="weather-description"></span>
+                        <div class="col-4 col-sm-12">
+                            <div class="degrees">
+                                <span id="degrees">-</span><sup>o</sup>
+                                <span>C</span>
+                            </div>
+                            <div>
+                                <span id="weather-description"></span>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-7">
+                <div class="col-12 col-sm-8 col-md-7">
                     <ul class="list-unstyled mb-0">
                         <li class="media mb-3">
                             <img id="media-item-0-image" class="mr-3 media-item-image" src="newspaper.svg" onError="this.onerror=null;this.src='newspaper.svg';" />
@@ -93,7 +148,7 @@
                                 <span id="media-item-3-title" class="media-item-title"></span>
                             </div>
                         </li>
-                        <li class="media">
+                        <li class="media d-flex d-sm-none d-md-flex">
                             <img id="media-item-4-image" class="mr-3 media-item-image" src="newspaper.svg" onError="this.onerror=null;this.src='newspaper.svg';" />
                             <div class="media-body">
                                 <span id="media-item-4-title" class="media-item-title"></span>
@@ -283,6 +338,7 @@
                 try {
                     responseGeocodingData = await fetch("https://eu1.locationiq.com/v1/reverse.php?key=cc9299850c1617&lat=" + latitude + "&lon=" + longitude + "&format=json");
                     jsonGeocodingData = await responseGeocodingData.json();
+                    console.log(jsonGeocodingData);
                     countryCode = jsonGeocodingData.address.country_code;
                     console.log("Country code retrieved successfully")
                     getLanguage();
@@ -297,6 +353,7 @@
                 try {
                     responseLanguageData = await fetch("https://restcountries.eu/rest/v2/alpha/" + countryCode);
                     jsonLanguageData = await responseLanguageData.json();
+                    console.log(jsonLanguageData);
                     languageCode = jsonLanguageData.languages[0].iso639_1
                     console.log("Language code retrieved successfully");
                     weather();
@@ -311,6 +368,7 @@
                     try {
                         responseWeather = await fetch("https://api.openweathermap.org/data/2.5/weather?lat=" + latitude + "&lon=" + longitude + "&units=metric&lang=" + languageCode + "&APPID=10935e3b27c5f4243595d8a541ec1277");
                         jsonWeather = await responseWeather.json();
+                        console.log(jsonWeather);
                         time = Math.floor(now.getTime() / 1000);
                         if ((time >= jsonWeather.sys.sunrise) && (time <  jsonWeather.sys.sunset)) {
                             weatherIcon.innerHTML = weatherConditions.day[jsonWeather.weather[0].id];
@@ -337,6 +395,7 @@
                 try {
                     responseNews = await fetch("https://newsapi.org/v2/top-headlines?country=" + countryCode + "&pageSize=5&apiKey=b5ace716ff454673ba8d7b08dccdf23d");
                     jsonNews = await responseNews.json();
+                    console.log(jsonNews);
                     for (let i = 0; i <= 4; i++) {
                         urlToImage = jsonNews.articles[i].urlToImage;
                         if ((urlToImage != null) && (urlToImage != "") && (urlToImage.startsWith("https"))) {
