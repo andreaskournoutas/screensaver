@@ -329,7 +329,7 @@
                     navigator.geolocation.getCurrentPosition((position) => {
                         latitude = Math.round(position.coords.latitude);
                         longitude = Math.round(position.coords.longitude);
-                        console.log("Location retrieved successfully")
+                        console.log("Location retrieved successfully: " + latitude + "," + longitude);
                         getCountry();
                     })
                 }
@@ -343,9 +343,8 @@
                     responseGeocodingData = await fetch("https://eu1.locationiq.com/v1/reverse.php?key=cc9299850c1617&lat=" + latitude + "&lon=" + longitude + "&format=json");
                     jsonGeocodingData = await responseGeocodingData.json();
                     countryCode = jsonGeocodingData.address.country_code;
-                    console.log("Country code retrieved successfully")
+                    console.log("Country code retrieved successfully: " + countryCode);
                     getLanguage();
-                    news();
                 }
                 catch (error) {
                     console.error(error);
@@ -358,8 +357,9 @@
                     jsonLanguageData = await responseLanguageData.json();
                     languageCode = jsonLanguageData.languages[0].iso639_1;
                     document.documentElement.setAttribute("lang", languageCode);
-                    console.log("Language code retrieved successfully");
+                    console.log("Language code retrieved successfully: " + languageCode);
                     weather();
+                    news();
                 }
                 catch (error) {
                     console.error(error);
@@ -380,7 +380,7 @@
                         }
                         degrees.textContent = Math.round(Number(jsonWeather.main.temp));
                         weatherDescription.textContent = jsonWeather.weather[0].description;
-                        console.log("Weather updated successfully");
+                        console.log("Weather updated successfully: " + jsonWeather.name);
                     }
                     catch (error) {
                         console.error(error);
@@ -395,17 +395,18 @@
 
             ;async function news() {
                 try {
-                    responseNews = await fetch("https://newsapi.org/v2/top-headlines?country=" + countryCode + "&pageSize=5&apiKey=b5ace716ff454673ba8d7b08dccdf23d");
+                    // responseNews = await fetch("https://newsapi.org/v2/top-headlines?country=" + countryCode + "&pageSize=5&apiKey=b5ace716ff454673ba8d7b08dccdf23d");
+                    responseNews = await fetch("https://gnews.io/api/v3/top-news?lang=" + languageCode + "&country=" + countryCode + "&max=5&token=787af70420e0629822aed38918917622");
                     jsonNews = await responseNews.json();
                     for (let i = 0; i <= 4; i++) {
-                        urlToImage = jsonNews.articles[i].urlToImage;
+                        urlToImage = jsonNews.articles[i].image;
                         if ((urlToImage != null) && (urlToImage != "") && (urlToImage.startsWith("https"))) {
                             document.getElementById("media-item-" + i + "-image").setAttribute("src", urlToImage);
                         }
                         else {
                             document.getElementById("media-item-" + i + "-image").setAttribute("src", "newspaper.svg");
                         }
-                        document.getElementById("media-item-" + i + "-title").innerHTML = jsonNews.articles[i].title;
+                        document.getElementById("media-item-" + i + "-title").innerHTML = jsonNews.articles[i].title + " | " + jsonNews.articles[i].source.name;
                     }
                     console.log("News updated successfully");
                 }
